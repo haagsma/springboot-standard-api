@@ -42,9 +42,9 @@ public class UserControlServiceImpl implements UserService {
     @Override
     public User login(User user) throws Exception {
 
-        if (user.getEmail() == null) throw new Exception("Email cannot be empty");
+        if (user.getEmail() == null || user.getEmail().isEmpty()) throw new Exception("Email cannot be empty");
 
-        if (user.getPassword() == null) throw new Exception("Password cannot be empty");
+        if (user.getPassword() == null || user.getPassword().isEmpty()) throw new Exception("Password cannot be empty");
 
         User userValidation = userRepository.findByEmail(user.getEmail());
 

@@ -11,6 +11,7 @@ import java.util.Date;
 @Entity
 @Table(name = "SYSTEM_USER_CORE")
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements Serializable {
 
     /**

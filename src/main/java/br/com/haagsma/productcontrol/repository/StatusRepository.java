@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StatusRepository extends PagingAndSortingRepository<Status, Long> {
 
+    Status findByTag(String tag);
+
 }

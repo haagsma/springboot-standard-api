@@ -2,11 +2,18 @@ package br.com.haagsma.productcontrol.config;
 
 import br.com.haagsma.productcontrol.service.RoutesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -20,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         routes = routesService.getAllowedRoutes().toArray(routes);
 
         httpSecurity.csrf().disable()
-                .cors()
+                .cors().configurationSource(request -> corsConfiguration())
                 .and()
                 .authorizeRequests()
                     .antMatchers(routes).permitAll()
@@ -28,5 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authenticated()
                 .and()
                 .addFilterBefore(new JwtFilter(), BasicAuthenticationFilter.class);
+    }
+
+    private CorsConfiguration corsConfiguration() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*", "http://localhost:3000"));
+        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers","Access-Control-Allow-Origin","Access-Control-Request-Method", "Access-Control-Request-Headers","Origin","Cache-Control", "Content-Type", "Authorization", "Accept"));
+        configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PUT"));
+        configuration.setAllowCredentials(false);
+
+        return configuration;
     }
 }

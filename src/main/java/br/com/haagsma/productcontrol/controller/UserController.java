@@ -1,8 +1,10 @@
 package br.com.haagsma.productcontrol.controller;
 
 import br.com.haagsma.productcontrol.model.Profile;
+import br.com.haagsma.productcontrol.model.Status;
 import br.com.haagsma.productcontrol.model.User;
 import br.com.haagsma.productcontrol.model.UserProfile;
+import br.com.haagsma.productcontrol.repository.StatusRepository;
 import br.com.haagsma.productcontrol.service.JwtService;
 import br.com.haagsma.productcontrol.service.UserProfileService;
 import br.com.haagsma.productcontrol.service.UserService;
@@ -33,6 +35,9 @@ public class UserController {
 
     @Autowired
     private UserProfileService userProfileService;
+
+    @Autowired
+    private StatusRepository statusRepository;
 
     @GetMapping("/test")
     public ResponseEntity<?> test() {
@@ -73,6 +78,27 @@ public class UserController {
         }
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            if (user.getName() == null) throw new Exception("Name cannot be empty");
+            if (user.getEmail() == null) throw new Exception("Email cannot be empty");
+            if (user.getPassword() == null) throw new Exception("Password cannot be empty");
+
+            Status status = statusRepository.findByTag("ACTIVE");
+            user.setStatus(status);
+
+            if (user.getPassword().length() < 60)
+                user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            userService.save(user);
+            user.setPassword(null);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         try {
@@ -89,7 +115,7 @@ public class UserController {
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 
