@@ -1,6 +1,8 @@
 package br.com.haagsma.productcontrol.model;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,9 +34,11 @@ public class Profile implements Serializable {
     @JoinColumn(name = "status_id")
     private Status status;
 
+    @CreationTimestamp
     @Column(name = "create_date")
     private Date createDate;
 
+    @UpdateTimestamp
     @Column(name = "update_date")
     private Date updateDate;
 }

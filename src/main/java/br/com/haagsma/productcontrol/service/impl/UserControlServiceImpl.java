@@ -29,6 +29,10 @@ public class UserControlServiceImpl implements UserService {
 
     @Override
     public User save(User user) throws Exception {
+        return userRepository.save(user);
+    }
+    @Override
+    public User register(User user) throws Exception {
         if (user.getId() == null && userRepository.findByEmail(user.getEmail()) != null)
             throw new Exception("Email already exists");
         return userRepository.save(user);

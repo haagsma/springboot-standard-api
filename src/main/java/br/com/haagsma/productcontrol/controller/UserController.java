@@ -6,6 +6,7 @@ import br.com.haagsma.productcontrol.model.User;
 import br.com.haagsma.productcontrol.model.UserProfile;
 import br.com.haagsma.productcontrol.repository.StatusRepository;
 import br.com.haagsma.productcontrol.service.JwtService;
+import br.com.haagsma.productcontrol.service.MailService;
 import br.com.haagsma.productcontrol.service.UserProfileService;
 import br.com.haagsma.productcontrol.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class UserController {
     @Autowired
     private StatusRepository statusRepository;
 
+    @Autowired
+    private MailService mailService;
+
     @GetMapping("/test")
     public ResponseEntity<?> test() {
         User user = new User();
@@ -60,15 +64,22 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody User user) {
+    public ResponseEntity<?> save(@RequestBody User userRequest) {
         try {
-            if (user.getName() == null) throw new Exception("Name cannot be empty");
-            if (user.getEmail() == null) throw new Exception("Email cannot be empty");
-            if (user.getPassword() == null) throw new Exception("Password cannot be empty");
-            if (user.getStatus() == null || user.getStatus().getId() == null) throw new Exception("Status cannot be empty or incorrect");
+            if (userRequest.getName() == null) throw new Exception("Name cannot be empty");
+            if (userRequest.getEmail() == null) throw new Exception("Email cannot be empty");
+            if (userRequest.getPassword() == null) throw new Exception("Password cannot be empty");
+            if (userRequest.getStatus() == null || userRequest.getStatus().getId() == null) throw new Exception("Status cannot be empty or incorrect");
 
-            if (user.getPassword().length() < 60)
-                user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            if (userRequest.getPassword() != null && userRequest.getPassword().length() < 60)
+                userRequest.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword()));
+
+            User user = userService.findOne(userRequest);
+            user.setEmail(userRequest.getEmail());
+            user.setName(userRequest.getName());
+            user.setPassword(userRequest.getPassword());
+            user.setStatus(userRequest.getStatus());
+
             userService.save(user);
             user.setPassword(null);
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -87,10 +98,9 @@ public class UserController {
 
             Status status = statusRepository.findByTag("ACTIVE");
             user.setStatus(status);
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
-            if (user.getPassword().length() < 60)
-                user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            userService.save(user);
+            userService.register(user);
             user.setPassword(null);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
@@ -112,6 +122,7 @@ public class UserController {
             Map<String, Object> res = new HashMap<>();
             res.put("user", userResponse);
             res.put("token", token);
+
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

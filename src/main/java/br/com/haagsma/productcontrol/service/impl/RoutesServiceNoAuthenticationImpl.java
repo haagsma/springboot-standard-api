@@ -11,6 +11,12 @@ public class RoutesServiceNoAuthenticationImpl implements RoutesService {
 
     @Override
     public List<String> getAllowedRoutes() {
-        return Arrays.asList("/user/login", "/user/register");
+        return Arrays.asList(
+                "/user/login",
+                "/user/register",
+                "/recovery/verify-email",
+                "/recovery/verify-code",
+                "/recovery/change-password"
+        );
     }
 }

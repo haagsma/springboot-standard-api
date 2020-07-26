@@ -1,6 +1,5 @@
 package br.com.haagsma.productcontrol.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,40 +10,37 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "SYSTEM_USER_CORE")
+@Table(name = "TOKEN")
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User implements Serializable {
+public class Token implements Serializable {
 
     /**
      * id	integer
-     * name	character varying	150
-     * email	character varying	255
-     * password	character varying	100
-     * status_id	integer
+     * token	character varying
      * create_date	timestamp without time zone
-     * update_date	timestamp without time zone
+     * expire_date	timestamp without time zone
+     * is_valid	boolean
+     * user_id	integer
      */
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-
-    @Column(unique = true)
-    private String email;
-    private String password;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
-    private Status status;
+    private String token;
 
     @CreationTimestamp
     @Column(name = "create_date")
     private Date createDate;
 
-    @UpdateTimestamp
-    @Column(name = "update_date")
-    private Date updateDate;
+    @Column(name = "expire_date")
+    private Date expireDate;
+
+    @Column(name = "is_valid")
+    private Boolean isValid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

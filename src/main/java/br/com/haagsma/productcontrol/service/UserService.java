@@ -10,6 +10,7 @@ public interface UserService {
 
     User findOne(User user);
     User save(User user) throws Exception;
+    User register(User user) throws Exception;
     Page<User> findAll(Pageable pageable);
     User login(User user) throws Exception;
 }
