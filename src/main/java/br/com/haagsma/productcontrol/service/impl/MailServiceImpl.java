@@ -15,19 +15,15 @@ public class MailServiceImpl implements MailService {
    @Autowired
    private JavaMailSender mailSender;
 
-    public void sender(User user, String subject, String body) {
-        try {
-            MimeMessage mail = mailSender.createMimeMessage();
+    public void sender(User user, String subject, String body) throws Exception {
 
-            MimeMessageHelper helper = new MimeMessageHelper(mail);
-            helper.setFrom("contato@gmail.com.br", "Empresa X");
-            helper.setTo(user.getEmail());
-            helper.setSubject(subject);
-            helper.setText(body);
-            mailSender.send(mail);
+        MimeMessage mail = mailSender.createMimeMessage();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MimeMessageHelper helper = new MimeMessageHelper(mail);
+        helper.setFrom("contato@gmail.com.br", "Empresa X");
+        helper.setTo(user.getEmail());
+        helper.setSubject(subject);
+        helper.setText(body);
+        mailSender.send(mail);
     }
 }
