@@ -1,25 +1,19 @@
 package br.com.haagsma.productcontrol.controller;
 
-import br.com.haagsma.productcontrol.model.Profile;
 import br.com.haagsma.productcontrol.model.Status;
 import br.com.haagsma.productcontrol.model.User;
-import br.com.haagsma.productcontrol.model.UserProfile;
 import br.com.haagsma.productcontrol.repository.StatusRepository;
 import br.com.haagsma.productcontrol.service.JwtService;
 import br.com.haagsma.productcontrol.service.MailService;
 import br.com.haagsma.productcontrol.service.UserProfileService;
 import br.com.haagsma.productcontrol.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
