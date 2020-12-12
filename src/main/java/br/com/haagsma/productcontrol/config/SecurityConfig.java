@@ -32,9 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(routes).permitAll()
                 .anyRequest()
-                    .authenticated()
-                .and()
-                .addFilterBefore(new JwtFilter(), BasicAuthenticationFilter.class);
+                    .permitAll();
+//                    .authenticated()
+//                .and()
+//                .addFilterBefore(new JwtFilter(), BasicAuthenticationFilter.class);
     }
 
     private CorsConfiguration corsConfiguration() {

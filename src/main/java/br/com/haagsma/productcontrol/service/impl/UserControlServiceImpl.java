@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserControlServiceImpl implements UserService {
 
@@ -40,7 +42,13 @@ public class UserControlServiceImpl implements UserService {
 
     @Override
     public Page<User> findAll(Pageable pageable) {
+        System.out.println("findall");
         return userRepository.findAll(pageable);
+    }
+    @Override
+    public List<User> findAll() {
+        System.out.println("findall");
+        return userRepository.findAll();
     }
 
     @Override

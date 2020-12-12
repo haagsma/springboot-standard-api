@@ -7,6 +7,7 @@ import br.com.haagsma.productcontrol.service.JwtService;
 import br.com.haagsma.productcontrol.service.MailService;
 import br.com.haagsma.productcontrol.service.UserProfileService;
 import br.com.haagsma.productcontrol.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,13 @@ import java.util.Map;
 
 @RequestMapping("/user")
 @RestController
+@CrossOrigin
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+//    private final UserService userService;
 
     @Autowired
     private JwtService jwtService;
