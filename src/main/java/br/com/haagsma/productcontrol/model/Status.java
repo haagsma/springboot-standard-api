@@ -1,6 +1,6 @@
 package br.com.haagsma.productcontrol.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +21,7 @@ public class Status implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String tag;
     private String description;
 

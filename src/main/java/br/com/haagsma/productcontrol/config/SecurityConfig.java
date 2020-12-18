@@ -2,18 +2,13 @@ package br.com.haagsma.productcontrol.config;
 
 import br.com.haagsma.productcontrol.service.RoutesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,10 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(routes).permitAll()
                 .anyRequest()
-                    .permitAll();
-//                    .authenticated()
-//                .and()
-//                .addFilterBefore(new JwtFilter(), BasicAuthenticationFilter.class);
+                    .authenticated()
+                .and()
+                .addFilterBefore(new JwtFilter(), BasicAuthenticationFilter.class);
     }
 
     private CorsConfiguration corsConfiguration() {
